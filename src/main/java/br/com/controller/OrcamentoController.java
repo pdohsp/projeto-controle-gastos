@@ -30,12 +30,6 @@ public class OrcamentoController {
 		return service.cadastrar(orcamento);
 	}
 
-	@ResponseStatus(HttpStatus.OK)
-	@PutMapping
-	public Orcamento atualizar(@RequestBody Orcamento orcamento) {
-		return service.atualizar(orcamento);
-	}
-
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void excluir(@PathVariable Integer id) {
@@ -47,4 +41,11 @@ public class OrcamentoController {
 	public List<Orcamento> listar() {
 		return service.listar();
 	}
+	
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping(value = "/addItem")
+	public Orcamento addItem(@RequestBody Orcamento orcamento) {
+		return service.addItem(orcamento);
+	}
+	
 }

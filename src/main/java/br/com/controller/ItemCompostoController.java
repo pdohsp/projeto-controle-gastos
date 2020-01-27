@@ -53,4 +53,5 @@ public class ItemCompostoController {
 	public List<ItemComposto> listar() {
 		return service.listar();
 	}
+	
 }

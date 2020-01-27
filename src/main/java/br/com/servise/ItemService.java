@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.entities.Item;
 import br.com.exception.CampoExistenteException;
+import br.com.exception.CampoNuloException;
 import br.com.repository.ItemRepository;
 
 @Service
@@ -16,18 +17,26 @@ public class ItemService {
 	private ItemRepository repository;
 
 	public Item cadastrar(Item item) {
-		if (repository.findByNome(item.getNome()).size() > 0)
+		if (item.getNome() == null || item.getNome().equals("")) {
+			throw new CampoNuloException("O campo nome não pode ser nulo");
+		}
+		if (repository.findByNome(item.getNome()).size() > 0) {
 			throw new CampoExistenteException("Já existe um item cadastrado com este nome");
-
+		}
 		return repository.save(item);
 	}
 
 	public Item atualizar(Item objeto) {
+		if (objeto.getNome() == null || objeto.getNome().equals("")) {
+			throw new CampoNuloException("O campo nome não pode ser nulo");
+		}
+		if (repository.findByNome(objeto.getNome()).size() > 0) {
+			throw new CampoExistenteException("Já existe um item cadastrado com este nome");
+		}
+		
 		Item item = repository.findById(objeto.getId()).get();
-
-		if (objeto.getNome() != null)
-			item.setNome(objeto.getNome());
-
+		item.setNome(objeto.getNome());
+		
 		return repository.save(item);
 	}
 
@@ -37,6 +46,10 @@ public class ItemService {
 
 	public List<Item> listar() {
 		return repository.findAll();
+	}
+
+	public List<Item> buscarPorNome(String nome) {
+		return repository.findByNome(nome);
 	}
 
 }

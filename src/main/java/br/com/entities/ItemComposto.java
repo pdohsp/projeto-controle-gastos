@@ -44,7 +44,7 @@ public class ItemComposto implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	public String getNome() {
 		return nome;
 	}

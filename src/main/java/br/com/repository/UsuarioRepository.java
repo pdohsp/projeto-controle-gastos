@@ -8,12 +8,10 @@ import br.com.entities.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
-	
 	List<Usuario> findByNomeContaining(String nome);
-	
+
 	List<Usuario> findByEmailContaining(String email);
 
 	List<Usuario> findByEmail(String email);
-	
-	List<Usuario> findBySenha(String senha);
+
 }
