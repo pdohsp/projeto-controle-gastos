@@ -11,9 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Orcamento implements java.io.Serializable {
@@ -65,6 +65,7 @@ public class Orcamento implements java.io.Serializable {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "orcamento_item")
 	public List<Item> getItems() {
 		return items;
 	}
@@ -73,7 +74,8 @@ public class Orcamento implements java.io.Serializable {
 		this.items = items;
 	}
 
-	@OneToMany(mappedBy = "orcamento", fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "Orcamento_Item_composto")
 	public List<ItemComposto> getItemsCompostos() {
 		return itemsCompostos;
 	}

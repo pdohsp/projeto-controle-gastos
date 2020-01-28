@@ -42,6 +42,12 @@ public class ItemCompostoController {
 		return service.addItem(itemComposto);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping(value = "/removerItem")
+	public ItemComposto removerItem(@RequestBody ItemComposto itemComposto) {
+		return service.removerItem(itemComposto);
+	}
+	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void excluir(@PathVariable Integer id) {

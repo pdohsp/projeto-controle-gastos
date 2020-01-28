@@ -45,4 +45,14 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(standardError);
 	}
 	
+	@ExceptionHandler(ObjetoNaoEncontradoException.class)
+	public ResponseEntity<StandardError> ObjetoNaoEncontrado(ObjetoNaoEncontradoException objetoNaoEncontradoException,
+			HttpServletRequest httpServletRequest) {
+
+		StandardError standardError = new StandardError(Instant.now(), HttpStatus.NOT_FOUND.value(), "Objeto nao encontrado",
+				objetoNaoEncontradoException.getMessage(), httpServletRequest.getRequestURI());
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(standardError);
+	}
+	
 }

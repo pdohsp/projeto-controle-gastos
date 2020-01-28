@@ -48,4 +48,22 @@ public class OrcamentoController {
 		return service.addItem(orcamento);
 	}
 	
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping(value = "/removerItem")
+	public Orcamento removerItem(@RequestBody Orcamento orcamento) {
+		return service.removerItem(orcamento);
+	}
+	
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping(value = "/addItemComposto")
+	public Orcamento addItemComposto(@RequestBody Orcamento orcamento) {
+		return service.addItemComposto(orcamento);
+	}
+	
+	@ResponseStatus(HttpStatus.OK)
+	@PutMapping(value = "/removerItemComposto")
+	public Orcamento removerItemComposto(@RequestBody Orcamento orcamento) {
+		return service.removerItemComposto(orcamento);
+	}
+	
 }

@@ -24,7 +24,7 @@ public class UsuarioService {
 		if (usuario.getEmail() == null || usuario.getEmail().equals("")) {
 			throw new CampoNuloException("O campo email não pode ser nulo");
 		}
-		if (repository.findByEmail(usuario.getEmail()).size() > 0) {
+		if (repository.findByEmail(usuario.getEmail()) != null) {
 			throw new CampoExistenteException("Email já cadastrado");
 		}
 		if (usuario.getSenha() == null || usuario.getSenha().equals("")) {
@@ -42,7 +42,7 @@ public class UsuarioService {
 		}
 		if (objeto.getEmail() != null && !objeto.getEmail().equals("")) {
 
-			if (repository.findByEmail(objeto.getEmail()).size() > 0) {
+			if (repository.findByEmail(objeto.getEmail()) != null) {
 				throw new CampoExistenteException("Email já cadastrado");
 			}
 
@@ -75,12 +75,12 @@ public class UsuarioService {
 			throw new CampoNuloException("O campo email não pode ser nulo");
 		}
 
-		List<Usuario> usuario = repository.findByEmail(objeto.getEmail());
+		Usuario usuario = repository.findByEmail(objeto.getEmail());
 
-		if (usuario.isEmpty()) {
+		if (usuario == null) {
 			throw new LoginException("Email incorreto");
 		}
-		if (!usuario.get(0).getSenha().equals(objeto.getSenha())) {
+		if (!usuario.getSenha().equals(objeto.getSenha())) {
 			throw new LoginException("Senha incorreta");
 		}
 	}

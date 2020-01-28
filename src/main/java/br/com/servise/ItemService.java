@@ -20,7 +20,7 @@ public class ItemService {
 		if (item.getNome() == null || item.getNome().equals("")) {
 			throw new CampoNuloException("O campo nome não pode ser nulo");
 		}
-		if (repository.findByNome(item.getNome()).size() > 0) {
+		if (repository.findByNome(item.getNome()) != null) {
 			throw new CampoExistenteException("Já existe um item cadastrado com este nome");
 		}
 		return repository.save(item);
@@ -30,7 +30,7 @@ public class ItemService {
 		if (objeto.getNome() == null || objeto.getNome().equals("")) {
 			throw new CampoNuloException("O campo nome não pode ser nulo");
 		}
-		if (repository.findByNome(objeto.getNome()).size() > 0) {
+		if (repository.findByNome(objeto.getNome()) != null) {
 			throw new CampoExistenteException("Já existe um item cadastrado com este nome");
 		}
 		
@@ -48,7 +48,7 @@ public class ItemService {
 		return repository.findAll();
 	}
 
-	public List<Item> buscarPorNome(String nome) {
+	public Item buscarPorNome(String nome) {
 		return repository.findByNome(nome);
 	}
 
