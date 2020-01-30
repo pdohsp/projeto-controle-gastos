@@ -23,22 +23,38 @@ public class OrcamentoService {
 
 	@Autowired
 	ItemCompostoService itemCompostoService;
-	
+
 	public Orcamento cadastrar(Orcamento orcamento) {
 		orcamento.setData(new Date());
 		return repository.save(orcamento);
 	}
 
 	public Orcamento addItem(Orcamento objeto) {
-		if (objeto.getItems().size() == 0) {
-			throw new CampoNuloException("Item Não informado");
+		if (objeto.getId() == null) {
+			throw new CampoNuloException("Informe o id do orçamento");
+		}
+		if (!repository.findById(objeto.getId()).isPresent()) {
+			throw new ObjetoNaoEncontradoException("Id do orçamento não encontrado");
+		}
+
+		if (objeto.getItems().get(0).getId() == null) {
+
+			if (objeto.getItems().get(0).getNome() == null) {
+				throw new CampoNuloException("Informe o nome do item");
+			}
+			if (objeto.getItems().get(0).getValor() == null) {
+				throw new CampoNuloException("Informe o valor do item");
+			}
+
+			itemService.cadastrar(objeto.getItems().get(0));
+
+		} else if (itemCompostoService.buscarPorId(objeto.getItemsCompostos().get(0).getId()) == null) {
+			throw new ObjetoNaoEncontradoException("Id não cadastrado");
 		}
 
 		Orcamento orcamento = repository.findById(objeto.getId()).get();
 
-		if (itemService.buscarPorNome(objeto.getItems().get(0).getNome()) == null) {
-			itemService.cadastrar(objeto.getItems().get(0));
-		} else if (orcamento.getItems().contains(objeto.getItems().get(0))) {
+		if (orcamento.getItems().contains(objeto.getItems().get(0))) {
 			throw new CampoExistenteException("O item  " + objeto.getItems().get(0).getNome() + ", já foi cadastrado");
 		}
 
@@ -47,16 +63,22 @@ public class OrcamentoService {
 	}
 
 	public Orcamento removerItem(Orcamento objeto) {
-		if (objeto.getItems().size() == 0) {
-			throw new CampoNuloException("Item Não informado");
+		if (objeto.getId() == null) {
+			throw new CampoNuloException("Informe o id do orçamento");
+		}
+		if (objeto.getItems().get(0).getId() == null) {
+			throw new CampoNuloException("Informe o id do item");
+		}
+		if (!repository.findById(objeto.getId()).isPresent()) {
+			throw new ObjetoNaoEncontradoException("Id do orçamento não encontrado");
 		}
 
 		Orcamento orcamento = repository.findById(objeto.getId()).get();
 
 		if (orcamento == null) {
-			throw new ObjetoNaoEncontradoException("Item não está cadastrado nesta lista de items");
+			throw new ObjetoNaoEncontradoException("Id do orçamento não encontrado");
 		} else if (!orcamento.getItems().contains(objeto.getItems().get(0))) {
-			throw new ObjetoNaoEncontradoException("Item não está cadastrado nesta lista de items");
+			throw new ObjetoNaoEncontradoException("Item não está cadastrado neste orcamento");
 		}
 
 		orcamento.getItems().remove(objeto.getItems().get(0));
@@ -64,39 +86,57 @@ public class OrcamentoService {
 	}
 
 	public Orcamento addItemComposto(Orcamento objeto) {
-		if (objeto.getItemsCompostos().size() == 0) {
-			throw new CampoNuloException("Item Não informado");
+		if (objeto.getId() == null) {
+			throw new CampoNuloException("Informe o id do orçamento");
+		}
+		if (!repository.findById(objeto.getId()).isPresent()) {
+			throw new ObjetoNaoEncontradoException("Id do orçamento não encontrado");
+		}
+
+		if (objeto.getItemsCompostos().get(0).getId() == null) {
+
+			if (objeto.getItemsCompostos().get(0).getNome() == null) {
+				throw new CampoNuloException("Informe o nome do itemComposto");
+			}
+
+			itemService.cadastrar(objeto.getItems().get(0));
+
+		} else if (!itemCompostoService.buscarPorId(objeto.getItemsCompostos().get(0).getId()).isPresent()) {
+			throw new ObjetoNaoEncontradoException("Id do itemComposto não cadastrado");
 		}
 
 		Orcamento orcamento = repository.findById(objeto.getId()).get();
 
-		if (itemCompostoService.buscarPorNome(objeto.getItemsCompostos().get(0).getNome()) == null) {
-			itemCompostoService.cadastrar(objeto.getItemsCompostos().get(0));
-		} else if (orcamento.getItemsCompostos().contains(objeto.getItemsCompostos().get(0))) {
-			throw new CampoExistenteException("O item  " + objeto.getItemsCompostos().get(0).getNome() + ", já foi cadastrado");
+		if (orcamento.getItemsCompostos().contains(objeto.getItemsCompostos().get(0))) {
+			throw new CampoExistenteException(
+					"O item " + objeto.getItemsCompostos().get(0).getNome() + ", já foi cadastrado");
 		}
-		
+
 		orcamento.getItemsCompostos().add(objeto.getItemsCompostos().get(0));
 		return repository.save(orcamento);
 	}
 
 	public Orcamento removerItemComposto(Orcamento objeto) {
-		if (objeto.getItemsCompostos().size() == 0) {
-			throw new CampoNuloException("Item Não informado");
+		if (objeto.getId() == null) {
+			throw new CampoNuloException("Informe o id do orçamento");
+		}
+		if (objeto.getItemsCompostos().get(0).getId() == null) {
+			throw new CampoNuloException("Informe o id do itemComposto");
+		}
+		if (!repository.findById(objeto.getId()).isPresent()) {
+			throw new ObjetoNaoEncontradoException("Id do itemComposto não cadastrado");
 		}
 
 		Orcamento orcamento = repository.findById(objeto.getId()).get();
 
-		if (orcamento == null) {
-			throw new ObjetoNaoEncontradoException("Item não está cadastrado neste orcamento");
-		} else if (!orcamento.getItemsCompostos().contains(objeto.getItemsCompostos().get(0))) {
-			throw new ObjetoNaoEncontradoException("Item não está cadastrado neste orcamento");
+		if (!orcamento.getItemsCompostos().contains(objeto.getItemsCompostos().get(0))) {
+			throw new ObjetoNaoEncontradoException("ItemComposto não está cadastrado neste orcamento");
 		}
 
 		orcamento.getItemsCompostos().remove(objeto.getItemsCompostos().get(0));
 		return repository.save(orcamento);
 	}
-	
+
 	public void excluir(Integer id) {
 		repository.deleteById(id);
 	}

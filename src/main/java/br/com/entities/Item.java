@@ -13,13 +13,15 @@ public class Item implements java.io.Serializable {
 
 	private Integer id;
 	private String nome;
-
+	private Double valor;
+	
 	public Item() {
 	}
 
-	public Item(Integer id, String nome) {
+	public Item(Integer id, String nome, Double valor) {
 		this.setId(id);
 		this.setNome(nome);
+		this.setValor(valor);
 	}
 
 	@Id
@@ -41,6 +43,15 @@ public class Item implements java.io.Serializable {
 		this.nome = nome;
 	}
 
+	@Column
+	public Double getValor() {
+		return valor;
+	}
+
+	public void setValor(Double valor) {
+		this.valor = valor;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

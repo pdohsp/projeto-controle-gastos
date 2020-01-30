@@ -22,6 +22,7 @@ public class Orcamento implements java.io.Serializable {
 
 	private Integer id;
 	private Date data;
+	private Double valorTotal;
 	private Usuario autor;
 	private List<Item> items = new ArrayList<>();
 	private List<ItemComposto> itemsCompostos = new ArrayList<>();
@@ -52,6 +53,25 @@ public class Orcamento implements java.io.Serializable {
 
 	public void setData(Date data) {
 		this.data = data;
+	}
+
+	@Column
+	public double getValorTotal() {
+		this.valorTotal = 0.0;
+
+		for (Item item : items) {
+			valorTotal += item.getValor();
+		}
+
+		for (ItemComposto itemComposto : itemsCompostos) {
+			valorTotal += itemComposto.getValor();
+		}
+
+		return valorTotal;
+	}
+
+	public void setValorTotal(Double valorTotal) {
+		this.valorTotal = valorTotal;
 	}
 
 	@ManyToOne

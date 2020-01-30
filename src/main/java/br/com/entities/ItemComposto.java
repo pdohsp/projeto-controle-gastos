@@ -9,7 +9,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 @Entity
-public class ItemComposto extends Item  {
+public class ItemComposto extends Item {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,6 +26,17 @@ public class ItemComposto extends Item  {
 
 	public void setItems(List<Item> items) {
 		this.items = items;
+	}
+
+	@Override
+	public Double getValor() {
+		double retorno = 0;
+
+		for (Item item : items) {
+			retorno += item.getValor();
+		}
+
+		return retorno;
 	}
 
 }

@@ -1,6 +1,7 @@
 package br.com.servise;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,9 @@ public class ItemCompostoService {
 		if (objeto.getItems().size() == 0) {
 			throw new CampoNuloException("Item Não informado");
 		}
+		if (!repository.findById(objeto.getId()).isPresent()) {
+			throw new ObjetoNaoEncontradoException("Id do orçamento não encontrado");
+		}
 
 		ItemComposto itemComposto = repository.findById(objeto.getId()).get();
 
@@ -54,6 +58,9 @@ public class ItemCompostoService {
 		if (objeto.getItems().size() == 0) {
 			throw new CampoNuloException("Item Não informado");
 		}
+		if (!repository.findById(objeto.getId()).isPresent()) {
+			throw new ObjetoNaoEncontradoException("Id do orçamento não encontrado");
+		}
 
 		ItemComposto itemComposto = repository.findById(objeto.getId()).get();
 
@@ -67,10 +74,14 @@ public class ItemCompostoService {
 		return repository.save(itemComposto);
 	}
 
+	public Optional<ItemComposto> buscarPorId(Integer id) {
+		return repository.findById(id);
+	}
+
 	public ItemComposto buscarPorNome(String nome) {
 		return repository.findByNome(nome);
 	}
-	
+
 	public void excluir(Integer id) {
 		repository.deleteById(id);
 	}
