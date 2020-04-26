@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.dto.ItemDTO;
 import br.com.entities.Item;
 import br.com.servise.ItemService;
 
@@ -26,13 +27,13 @@ public class ItemController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	public Item cadastrar(@RequestBody Item item) {
+	public ItemDTO cadastrar(@RequestBody Item item) {
 		return service.cadastrar(item);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping
-	public Item atualizar(@RequestBody Item item) {
+	public ItemDTO atualizar(@RequestBody Item item) {
 		return service.atualizar(item);
 	}
 
@@ -44,7 +45,14 @@ public class ItemController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
-	public List<Item> listar() {
+	public List<ItemDTO> listar() {
 		return service.listar();
 	}
+	
+	@ResponseStatus(HttpStatus.OK)
+	@GetMapping("/{nome}")
+	public List<ItemDTO> buscarPorNome(@PathVariable String nome) {
+		return service.buscarPorNome(nome);
+	}
+	
 }

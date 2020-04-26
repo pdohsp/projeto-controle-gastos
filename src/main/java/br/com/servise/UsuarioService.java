@@ -1,10 +1,12 @@
 package br.com.servise;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.dto.UsuarioDTO;
 import br.com.entities.Usuario;
 import br.com.exception.CampoExistenteException;
 import br.com.exception.CampoNuloException;
@@ -17,7 +19,7 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository repository;
 
-	public Usuario cadastrar(Usuario usuario) {
+	public UsuarioDTO cadastrar(Usuario usuario) {
 		if (usuario.getNome() == null || usuario.getNome().equals("")) {
 			throw new CampoNuloException("O campo nome não pode ser nulo");
 		}
@@ -30,11 +32,12 @@ public class UsuarioService {
 		if (usuario.getSenha() == null || usuario.getSenha().equals("")) {
 			throw new CampoNuloException("O campo senha não pode ser nulo");
 		}
-
-		return repository.save(usuario);
+		
+		UsuarioDTO usuarioDTO = new UsuarioDTO(repository.save(usuario));
+		return  usuarioDTO;
 	}
 
-	public Usuario atualizar(Usuario objeto) {
+	public UsuarioDTO atualizar(Usuario objeto) {
 		Usuario usuario = repository.findById(objeto.getId()).get();
 
 		if (objeto.getNome() != null && !objeto.getNome().equals("")) {
@@ -51,23 +54,25 @@ public class UsuarioService {
 		if (objeto.getSenha() != null && !objeto.getSenha().equals("")) {
 			usuario.setSenha(objeto.getSenha());
 		}
-		return repository.save(usuario);
+		
+		UsuarioDTO usuarioDTO = new UsuarioDTO(repository.save(usuario));
+		return  usuarioDTO;
 	}
 
 	public void excluir(Integer id) {
 		repository.deleteById(id);
 	}
 
-	public List<Usuario> listar() {
-		return repository.findAll();
+	public List<UsuarioDTO> listar() {
+		return repository.findAll().stream().map(x -> new UsuarioDTO(x)).collect(Collectors.toList());
 	}
 
-	public List<Usuario> buscarPorNome(String nome) {
-		return repository.findByNomeContaining(nome);
+	public List<UsuarioDTO> buscarPorNome(String nome) {
+		return repository.findByNomeContaining(nome).stream().map(x -> new UsuarioDTO(x)).collect(Collectors.toList());
 	}
 
-	public List<Usuario> buscarPorEmail(String email) {
-		return repository.findByEmailContaining(email);
+	public List<UsuarioDTO> buscarPorEmail(String email) {
+		return repository.findByEmailContaining(email).stream().map(x -> new UsuarioDTO(x)).collect(Collectors.toList());
 	}
 
 	public void login(Usuario objeto) {

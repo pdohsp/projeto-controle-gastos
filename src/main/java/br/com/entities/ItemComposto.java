@@ -11,8 +11,6 @@ import javax.persistence.ManyToMany;
 @Entity
 public class ItemComposto extends Item {
 
-	private static final long serialVersionUID = 1L;
-
 	private List<Item> items = new ArrayList<>();
 
 	public ItemComposto() {

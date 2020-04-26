@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.dto.UsuarioDTO;
 import br.com.entities.Usuario;
 import br.com.servise.UsuarioService;
 
@@ -26,13 +27,13 @@ public class UsuarioController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	public Usuario cadastrar(@RequestBody Usuario usuario) {
+	public UsuarioDTO cadastrar(@RequestBody Usuario usuario) {
 		return service.cadastrar(usuario);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
 	@PutMapping
-	public Usuario atualizar(@RequestBody Usuario usuario) {
+	public UsuarioDTO atualizar(@RequestBody Usuario usuario) {
 		return service.atualizar(usuario);
 	}
 
@@ -44,19 +45,19 @@ public class UsuarioController {
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
-	public List<Usuario> listar() {
+	public List<UsuarioDTO> listar() {
 		return service.listar();
 	}
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = "/buscarPorNome/{nome}")
-	public List<Usuario> buscarPorNome(@PathVariable String nome) {
+	public List<UsuarioDTO> buscarPorNome(@PathVariable String nome) {
 		return service.buscarPorNome(nome);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping(value = "/buscarPorEmail/{email}")
-	public List<Usuario> buscarPorEmail(@PathVariable String email) {
+	public List<UsuarioDTO> buscarPorEmail(@PathVariable String email) {
 		return service.buscarPorEmail(email);
 	}
 

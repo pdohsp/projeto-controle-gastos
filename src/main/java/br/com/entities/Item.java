@@ -7,9 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Item implements java.io.Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class Item {
 
 	private Integer id;
 	private String nome;

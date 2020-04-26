@@ -1,10 +1,12 @@
 package br.com.servise;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.dto.ItemDTO;
 import br.com.entities.Item;
 import br.com.exception.CampoExistenteException;
 import br.com.exception.CampoNuloException;
@@ -16,17 +18,19 @@ public class ItemService {
 	@Autowired
 	private ItemRepository repository;
 
-	public Item cadastrar(Item item) {
+	public ItemDTO cadastrar(Item item) {
 		if (item.getNome() == null || item.getNome().equals("")) {
 			throw new CampoNuloException("O campo nome não pode ser nulo");
 		}
 		if (repository.findByNome(item.getNome()) != null) {
 			throw new CampoExistenteException("Já existe um item cadastrado com este nome");
 		}
-		return repository.save(item);
+		
+		ItemDTO itemDTO = new ItemDTO(repository.save(item));
+		return itemDTO;
 	}
 
-	public Item atualizar(Item objeto) {
+	public ItemDTO atualizar(Item objeto) {
 		if (objeto.getNome() == null || objeto.getNome().equals("")) {
 			throw new CampoNuloException("O campo nome não pode ser nulo");
 		}
@@ -36,20 +40,22 @@ public class ItemService {
 		
 		Item item = repository.findById(objeto.getId()).get();
 		item.setNome(objeto.getNome());
+		item.setValor(objeto.getValor());
 		
-		return repository.save(item);
+		ItemDTO itemDTO = new ItemDTO(repository.save(item));
+		return itemDTO;
 	}
 
 	public void excluir(Integer id) {
 		repository.deleteById(id);
 	}
 
-	public List<Item> listar() {
-		return repository.findAll();
+	public List<ItemDTO> listar() {
+		return repository.findAll().stream().map(x -> new ItemDTO(x)).collect(Collectors.toList());
 	}
 
-	public Item buscarPorNome(String nome) {
-		return repository.findByNome(nome);
+	public List<ItemDTO> buscarPorNome(String nome) {
+		return repository.findByNomeContaining(nome).stream().map(x -> new ItemDTO(x)).collect(Collectors.toList());
 	}
 
 }
